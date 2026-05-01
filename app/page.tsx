@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Shield, MessageSquare, Search, Lock, CheckCircle2, ChevronRight } from 'lucide-react'
+import { MessageSquare, Search, Lock, CheckCircle2, ChevronRight, Shield } from 'lucide-react'
 
 const countries = [
   { code: 'ES', name: 'España', dial: '+34' },
@@ -106,18 +106,15 @@ export default function HomePage() {
       <header style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 1rem', display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ 
-              width: '56px', 
-              height: '56px', 
-              borderRadius: '16px', 
-              background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              boxShadow: '0 10px 25px rgba(37, 211, 102, 0.3)'
-            }}>
-              <Shield style={{ width: '28px', height: '28px', color: 'white' }} />
-            </div>
+            <img 
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/fe5ed57a619cfc38984373dbfe00d691-removebg-preview-Ee79m9VUfCWDfeua7G7DZi2ob6c0Or.png" 
+              alt="Affair Detect Logo"
+              style={{ 
+                width: '64px', 
+                height: '64px', 
+                objectFit: 'contain'
+              }}
+            />
             <div>
               <h1 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', letterSpacing: '-0.025em' }}>Affair Detect</h1>
               <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>Sistema de Monitoreo</p>
@@ -187,7 +184,7 @@ export default function HomePage() {
                     fontWeight: '700', 
                     textTransform: 'uppercase', 
                     letterSpacing: '0.05em', 
-                    color: '#25D366',
+                    color: '#dc2626',
                     display: 'block',
                     marginBottom: '0.25rem'
                   }}>
