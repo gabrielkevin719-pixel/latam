@@ -3,25 +3,22 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Shield, MessageSquare, Search, Lock, CheckCircle2, ChevronRight } from 'lucide-react'
-import PhoneInput, { isValidPhoneNumber, formatPhoneNumberIntl } from 'react-phone-number-input'
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 const steps = [
   {
     number: 1,
-    title: 'Primer Paso',
     description: 'Introduce el número de la persona que quieres monitorizar y rastrear.',
     icon: MessageSquare,
   },
   {
     number: 2,
-    title: 'Segundo Paso',
     description: 'Espera mientras el sistema escanea secretamente los mensajes y archivos multimedia.',
     icon: Search,
   },
   {
     number: 3,
-    title: 'Tercer Paso',
     description: 'Consulta todos los mensajes monitorizados y archivos sospechosos detectados.',
     icon: CheckCircle2,
   },
@@ -121,7 +118,7 @@ export default function HomePage() {
             <div 
               key={step.number}
               className="animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.15}s`, opacity: 0 }}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-4">
@@ -159,14 +156,13 @@ export default function HomePage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+              <div className="phone-input-wrapper">
                 <PhoneInput
                   international
                   defaultCountry="ES"
                   value={phone}
                   onChange={setPhone}
                   placeholder="Número de teléfono"
-                  className="phone-input-custom"
                 />
               </div>
 
