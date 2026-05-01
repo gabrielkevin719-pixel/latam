@@ -23,7 +23,7 @@
   <meta name="robots" content="max-image-preview:large">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preload" as="video" href="../es-1.mp4" type="video/mp4">
+  
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
@@ -156,7 +156,7 @@
   <div style="margin:0 12px;">
     <div class="card" style="padding:10px 14px 8px;margin:0;border-radius:var(--radius) var(--radius) 0 0;"><div class="sec-title" style="margin:0;">&#127909; Cómo Funciona WhatSpy</div></div>
     <div class="video-wrap" style="margin:0;border-radius:0 0 var(--radius) var(--radius);border-top:none;">
-      <video id="player" playsinline preload="auto" muted autoplay src="../es-1.mp4"></video>
+      <video id="player" playsinline preload="auto" muted autoplay></video>
       <div class="video-unmute" id="unmuteBtn"><span class="u-icon">&#128263;</span><span class="u-text">Toca para escuchar</span></div>
     </div>
   </div>
@@ -212,8 +212,17 @@ document.addEventListener('DOMContentLoaded',function(){
   var video=document.getElementById('player');
   var unmuteBtn=document.getElementById('unmuteBtn');
   var userPaused=false;
-  video.muted=true;
-  video.play().catch(function(){});
+  var hlsSrc='https://vz-c7bbc1ea-a33.b-cdn.net/b40dfba2-e530-4c88-96e7-4cfb918168a1/playlist.m3u8';
+  function startVideo(){video.muted=true;video.play().catch(function(){});}
+  if(video.canPlayType('application/vnd.apple.mpegURL')){
+    video.src=hlsSrc;
+    video.addEventListener('loadedmetadata',startVideo);
+  }else if(window.Hls&&window.Hls.isSupported()){
+    var hls=new Hls({maxBufferLength:30,startLevel:0,capLevelToPlayerSize:true});
+    hls.loadSource(hlsSrc);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,startVideo);
+  }
   video.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){video.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)video.play().catch(function(){});});
   window.addEventListener('focus',function(){if(video.paused&&!userPaused)video.play().catch(function(){});});
