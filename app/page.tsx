@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+/* eslint-disable @next/next/no-img-element */
 import { MessageSquare, Search, Lock, CheckCircle2, ChevronRight, Shield } from 'lucide-react'
 
 const countries = [
@@ -242,7 +242,7 @@ export default function HomePage() {
                       height: '100%'
                     }}
                   >
-                    <Image src={getFlagUrl(selectedCountry.code)} alt={selectedCountry.name} width={28} height={20} style={{ objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} unoptimized />
+                    <img src={getFlagUrl(selectedCountry.code)} alt={selectedCountry.name} width={28} height={20} style={{ objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} />
                     <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ color: '#6B7280' }}>
                       <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -287,7 +287,7 @@ export default function HomePage() {
                           onMouseOver={(e) => e.currentTarget.style.background = selectedCountry.code === country.code ? '#f0fdf4' : '#f9fafb'}
                           onMouseOut={(e) => e.currentTarget.style.background = selectedCountry.code === country.code ? '#f0fdf4' : 'transparent'}
                         >
-                          <Image src={getFlagUrl(country.code)} alt={country.name} width={28} height={20} style={{ objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} unoptimized />
+                          <img src={getFlagUrl(country.code)} alt={country.name} width={28} height={20} style={{ objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} />
                           <span style={{ flex: 1, color: '#374151', fontWeight: '500' }}>{country.name}</span>
                           <span style={{ color: '#9CA3AF', fontSize: '0.8rem' }}>{country.dial}</span>
                         </button>
