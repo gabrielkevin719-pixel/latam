@@ -1,0 +1,9 @@
+{
+  "name": "latam-project",
+  "version": "1.0.0",
+  "description": "LATAM project with 3-step flow",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 3000"
+  }
+}
