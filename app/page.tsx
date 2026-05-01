@@ -3,8 +3,19 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Shield, MessageSquare, Search, Lock, CheckCircle2, ChevronRight } from 'lucide-react'
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
-import 'react-phone-number-input/style.css'
+
+const countries = [
+  { code: 'ES', name: 'España', dial: '+34', flag: '🇪🇸' },
+  { code: 'MX', name: 'México', dial: '+52', flag: '🇲🇽' },
+  { code: 'AR', name: 'Argentina', dial: '+54', flag: '🇦🇷' },
+  { code: 'CO', name: 'Colombia', dial: '+57', flag: '🇨🇴' },
+  { code: 'CL', name: 'Chile', dial: '+56', flag: '🇨🇱' },
+  { code: 'PE', name: 'Perú', dial: '+51', flag: '🇵🇪' },
+  { code: 'VE', name: 'Venezuela', dial: '+58', flag: '🇻🇪' },
+  { code: 'EC', name: 'Ecuador', dial: '+593', flag: '🇪🇨' },
+  { code: 'US', name: 'Estados Unidos', dial: '+1', flag: '🇺🇸' },
+  { code: 'BR', name: 'Brasil', dial: '+55', flag: '🇧🇷' },
+]
 
 const steps = [
   {
@@ -26,7 +37,9 @@ const steps = [
 
 export default function HomePage() {
   const router = useRouter()
-  const [phone, setPhone] = useState<string>()
+  const [phone, setPhone] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(countries[0])
+  const [showDropdown, setShowDropdown] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [utmParams, setUtmParams] = useState<Record<string, string>>({})
@@ -34,7 +47,6 @@ export default function HomePage() {
   useEffect(() => {
     setMounted(true)
     
-    // Capturar UTM params
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       const utms: Record<string, string> = {}
@@ -44,7 +56,6 @@ export default function HomePage() {
       })
       setUtmParams(utms)
 
-      // Tracking webhook
       fetch('https://primary-production-aac6.up.railway.app/webhook/pablo-monitor?step=1', { method: 'GET' })
         .catch(() => {})
     }
@@ -53,17 +64,16 @@ export default function HomePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!phone || !isValidPhoneNumber(phone)) {
+    const cleanPhone = phone.replace(/\D/g, '')
+    if (cleanPhone.length < 6) {
       alert('Por favor, introduce un número de teléfono válido.')
       return
     }
 
     setIsSubmitting(true)
 
-    // Format phone without +
-    let fullNumber = phone.replace('+', '')
+    const fullNumber = selectedCountry.dial.replace('+', '') + cleanPhone
 
-    // Build redirect URL with UTM params
     let redirectUrl = `/step2/index.html?tel=${encodeURIComponent(fullNumber)}`
     Object.entries(utmParams).forEach(([key, value]) => {
       redirectUrl += `&${key}=${encodeURIComponent(value)}`
@@ -77,64 +87,101 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[hsl(210,20%,98%)] to-[hsl(210,25%,95%)]">
+    <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)' }}>
       {/* Header */}
-      <header className="pt-8 pb-4">
-        <div className="max-w-lg mx-auto px-4 flex justify-center">
-          <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#25D366] to-[#128C7E] flex items-center justify-center shadow-lg animate-float">
-              <Shield className="w-7 h-7 text-white" />
+      <header style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 1rem', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ 
+              width: '56px', 
+              height: '56px', 
+              borderRadius: '16px', 
+              background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              boxShadow: '0 10px 25px rgba(37, 211, 102, 0.3)'
+            }}>
+              <Shield style={{ width: '28px', height: '28px', color: 'white' }} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-[#111827] tracking-tight">Affair Detect</h1>
-              <p className="text-xs text-[#6B7280]">Sistema de Monitoreo</p>
+              <h1 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', letterSpacing: '-0.025em' }}>Affair Detect</h1>
+              <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>Sistema de Monitoreo</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="pt-6 pb-8 px-4">
-        <div className="max-w-lg mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 border border-[#25D366]/20 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-            <span className="text-sm font-medium text-[#128C7E]">100% Discreto y Seguro</span>
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '2rem', padding: '1.5rem 1rem 2rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.5rem 1rem', 
+            borderRadius: '9999px', 
+            background: 'rgba(37, 211, 102, 0.1)', 
+            border: '1px solid rgba(37, 211, 102, 0.2)',
+            marginBottom: '1.5rem'
+          }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#25D366' }} />
+            <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#128C7E' }}>100% Discreto y Seguro</span>
           </div>
           
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] leading-tight mb-4 text-balance">
+          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#111827', lineHeight: '1.2', marginBottom: '1rem' }}>
             ¿Estás cansado de vivir con sospecha constante?
           </h2>
           
-          <p className="text-base text-[#6B7280] max-w-md mx-auto">
+          <p style={{ fontSize: '1rem', color: '#6B7280', maxWidth: '400px', margin: '0 auto' }}>
             Obtén las respuestas que necesitas ahora. Nuestro sistema escanea mensajes y archivos de forma totalmente invisible.
           </p>
         </div>
       </section>
 
       {/* Steps Section */}
-      <section className="px-4 pb-8">
-        <div className="max-w-lg mx-auto space-y-3">
-          {steps.map((step, index) => (
+      <section style={{ padding: '0 1rem 2rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {steps.map((step) => (
             <div 
               key={step.number}
-              className="animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              style={{ 
+                background: 'white', 
+                borderRadius: '12px', 
+                border: '1px solid #E5E7EB', 
+                padding: '1rem',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              }}
             >
-              <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#25D366] to-[#128C7E] flex items-center justify-center shadow-md">
-                    <step.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#25D366]">
-                        Paso {step.number}
-                      </span>
-                    </div>
-                    <p className="text-sm text-[#374151] leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                <div style={{ 
+                  flexShrink: 0,
+                  width: '48px', 
+                  height: '48px', 
+                  borderRadius: '12px', 
+                  background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(37, 211, 102, 0.25)'
+                }}>
+                  <step.icon style={{ width: '20px', height: '20px', color: 'white' }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <span style={{ 
+                    fontSize: '0.75rem', 
+                    fontWeight: '700', 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em', 
+                    color: '#25D366',
+                    display: 'block',
+                    marginBottom: '0.25rem'
+                  }}>
+                    Paso {step.number}
+                  </span>
+                  <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: '1.5' }}>
+                    {step.description}
+                  </p>
                 </div>
               </div>
             </div>
@@ -143,53 +190,172 @@ export default function HomePage() {
       </section>
 
       {/* Form Section */}
-      <section className="px-4 pb-12">
-        <div className="max-w-lg mx-auto">
-          <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-lg">
-            <div className="text-center mb-6">
-              <h3 className="text-lg font-bold text-[#111827] mb-1">
+      <section style={{ padding: '0 1rem 3rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+          <div style={{ 
+            background: 'white', 
+            borderRadius: '16px', 
+            border: '1px solid #E5E7EB', 
+            padding: '1.5rem',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+          }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#111827', marginBottom: '0.25rem' }}>
                 Ingrese el número de la persona
               </h3>
-              <p className="text-sm text-[#9CA3AF]">
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>
                 El número será verificado antes del escaneo
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="phone-input-wrapper">
-                <PhoneInput
-                  international
-                  defaultCountry="ES"
-                  value={phone}
-                  onChange={setPhone}
-                  placeholder="Número de teléfono"
-                />
+            <form onSubmit={handleSubmit}>
+              {/* Phone Input */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                {/* Country Selector */}
+                <div style={{ position: 'relative' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    style={{ 
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.875rem 0.75rem',
+                      background: '#f8fafc',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      fontSize: '1.25rem',
+                      height: '100%'
+                    }}
+                  >
+                    <span>{selectedCountry.flag}</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: '#6B7280' }}>
+                      <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                  
+                  {showDropdown && (
+                    <div style={{ 
+                      position: 'absolute', 
+                      top: '100%', 
+                      left: 0, 
+                      marginTop: '0.25rem',
+                      background: 'white',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                      zIndex: 50,
+                      minWidth: '200px',
+                      maxHeight: '250px',
+                      overflowY: 'auto'
+                    }}>
+                      {countries.map((country) => (
+                        <button
+                          key={country.code}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCountry(country)
+                            setShowDropdown(false)
+                          }}
+                          style={{ 
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            width: '100%',
+                            padding: '0.75rem 1rem',
+                            background: selectedCountry.code === country.code ? '#f0fdf4' : 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontSize: '0.875rem'
+                          }}
+                        >
+                          <span style={{ fontSize: '1.25rem' }}>{country.flag}</span>
+                          <span style={{ flex: 1, color: '#374151' }}>{country.name}</span>
+                          <span style={{ color: '#6B7280' }}>{country.dial}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Phone Number Input */}
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                  <span style={{ 
+                    padding: '0.875rem 0 0.875rem 1rem',
+                    background: 'white',
+                    border: '2px solid #e5e7eb',
+                    borderRight: 'none',
+                    borderRadius: '12px 0 0 12px',
+                    color: '#6B7280',
+                    fontSize: '1rem',
+                    fontWeight: '500'
+                  }}>
+                    {selectedCountry.dial}
+                  </span>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Número de teléfono"
+                    style={{ 
+                      flex: 1,
+                      padding: '0.875rem 1rem',
+                      fontSize: '1rem',
+                      fontWeight: '500',
+                      background: 'white',
+                      border: '2px solid #e5e7eb',
+                      borderLeft: 'none',
+                      borderRadius: '0 12px 12px 0',
+                      color: '#111827',
+                      outline: 'none',
+                      minWidth: 0
+                    }}
+                  />
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 px-6 bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed animate-pulse-glow flex items-center justify-center gap-2"
+                style={{ 
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: 'linear-gradient(90deg, #25D366 0%, #128C7E 100%)',
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: '1rem',
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  opacity: isSubmitting ? 0.7 : 1,
+                  boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
               >
-                <Lock className="w-5 h-5" />
+                <Lock style={{ width: '20px', height: '20px' }} />
                 <span>{isSubmitting ? 'Procesando...' : 'CLONAR WHATSAPP AHORA'}</span>
-                {!isSubmitting && <ChevronRight className="w-5 h-5" />}
+                {!isSubmitting && <ChevronRight style={{ width: '20px', height: '20px' }} />}
               </button>
             </form>
 
             {/* Trust Badges */}
-            <div className="mt-6 pt-6 border-t border-[#F3F4F6]">
-              <div className="flex items-center justify-center gap-6 text-xs text-[#9CA3AF]">
-                <div className="flex items-center gap-1.5">
-                  <Shield className="w-4 h-4 text-[#25D366]" />
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #F3F4F6' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', fontSize: '0.75rem', color: '#9CA3AF' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                  <Shield style={{ width: '16px', height: '16px', color: '#25D366' }} />
                   <span>SSL Seguro</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Lock className="w-4 h-4 text-[#25D366]" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                  <Lock style={{ width: '16px', height: '16px', color: '#25D366' }} />
                   <span>100% Privado</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-[#25D366]" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                  <CheckCircle2 style={{ width: '16px', height: '16px', color: '#25D366' }} />
                   <span>Verificado</span>
                 </div>
               </div>
@@ -199,34 +365,42 @@ export default function HomePage() {
       </section>
 
       {/* Footer Stats */}
-      <section className="px-4 pb-8">
-        <div className="max-w-lg mx-auto">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/60 backdrop-blur rounded-xl p-4 text-center border border-[#E5E7EB]/50">
-              <div className="text-2xl font-bold text-[#111827]">10M+</div>
-              <div className="text-xs text-[#6B7280]">Usuarios</div>
+      <section style={{ padding: '0 1rem 2rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+            <div style={{ background: 'rgba(255,255,255,0.6)', borderRadius: '12px', padding: '1rem', textAlign: 'center', border: '1px solid rgba(229, 231, 235, 0.5)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>10M+</div>
+              <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Usuarios</div>
             </div>
-            <div className="bg-white/60 backdrop-blur rounded-xl p-4 text-center border border-[#E5E7EB]/50">
-              <div className="text-2xl font-bold text-[#111827]">99.9%</div>
-              <div className="text-xs text-[#6B7280]">Precisión</div>
+            <div style={{ background: 'rgba(255,255,255,0.6)', borderRadius: '12px', padding: '1rem', textAlign: 'center', border: '1px solid rgba(229, 231, 235, 0.5)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>99.9%</div>
+              <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Precisión</div>
             </div>
-            <div className="bg-white/60 backdrop-blur rounded-xl p-4 text-center border border-[#E5E7EB]/50">
-              <div className="text-2xl font-bold text-[#111827]">24/7</div>
-              <div className="text-xs text-[#6B7280]">Soporte</div>
+            <div style={{ background: 'rgba(255,255,255,0.6)', borderRadius: '12px', padding: '1rem', textAlign: 'center', border: '1px solid rgba(229, 231, 235, 0.5)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>24/7</div>
+              <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Soporte</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Disclaimer */}
-      <footer className="px-4 pb-8">
-        <div className="max-w-lg mx-auto">
-          <p className="text-xs text-center text-[#9CA3AF] leading-relaxed">
+      <footer style={{ padding: '0 1rem 2rem' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+          <p style={{ fontSize: '0.75rem', textAlign: 'center', color: '#9CA3AF', lineHeight: '1.5' }}>
             Al usar este servicio, aceptas nuestros términos y condiciones.
             Toda la información es procesada de forma segura y confidencial.
           </p>
         </div>
       </footer>
+
+      {/* Click outside to close dropdown */}
+      {showDropdown && (
+        <div 
+          onClick={() => setShowDropdown(false)}
+          style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+        />
+      )}
     </main>
   )
 }
