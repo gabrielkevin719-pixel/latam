@@ -5,17 +5,31 @@ import { useRouter } from 'next/navigation'
 import { Shield, MessageSquare, Search, Lock, CheckCircle2, ChevronRight } from 'lucide-react'
 
 const countries = [
-  { code: 'ES', name: 'España', dial: '+34', flag: '🇪🇸' },
-  { code: 'MX', name: 'México', dial: '+52', flag: '🇲🇽' },
-  { code: 'AR', name: 'Argentina', dial: '+54', flag: '🇦🇷' },
-  { code: 'CO', name: 'Colombia', dial: '+57', flag: '🇨🇴' },
-  { code: 'CL', name: 'Chile', dial: '+56', flag: '🇨🇱' },
-  { code: 'PE', name: 'Perú', dial: '+51', flag: '🇵🇪' },
-  { code: 'VE', name: 'Venezuela', dial: '+58', flag: '🇻🇪' },
-  { code: 'EC', name: 'Ecuador', dial: '+593', flag: '🇪🇨' },
-  { code: 'US', name: 'Estados Unidos', dial: '+1', flag: '🇺🇸' },
-  { code: 'BR', name: 'Brasil', dial: '+55', flag: '🇧🇷' },
+  { code: 'ES', name: 'España', dial: '+34' },
+  { code: 'MX', name: 'México', dial: '+52' },
+  { code: 'AR', name: 'Argentina', dial: '+54' },
+  { code: 'CO', name: 'Colombia', dial: '+57' },
+  { code: 'CL', name: 'Chile', dial: '+56' },
+  { code: 'PE', name: 'Perú', dial: '+51' },
+  { code: 'VE', name: 'Venezuela', dial: '+58' },
+  { code: 'EC', name: 'Ecuador', dial: '+593' },
+  { code: 'US', name: 'Estados Unidos', dial: '+1' },
+  { code: 'BR', name: 'Brasil', dial: '+55' },
+  { code: 'UY', name: 'Uruguay', dial: '+598' },
+  { code: 'PY', name: 'Paraguay', dial: '+595' },
+  { code: 'BO', name: 'Bolivia', dial: '+591' },
+  { code: 'CR', name: 'Costa Rica', dial: '+506' },
+  { code: 'PA', name: 'Panamá', dial: '+507' },
+  { code: 'GT', name: 'Guatemala', dial: '+502' },
+  { code: 'HN', name: 'Honduras', dial: '+504' },
+  { code: 'SV', name: 'El Salvador', dial: '+503' },
+  { code: 'NI', name: 'Nicaragua', dial: '+505' },
+  { code: 'DO', name: 'Rep. Dominicana', dial: '+1' },
+  { code: 'CU', name: 'Cuba', dial: '+53' },
+  { code: 'PR', name: 'Puerto Rico', dial: '+1' },
 ]
+
+const getFlagUrl = (code: string) => `https://flagcdn.com/w40/${code.toLowerCase()}.png`
 
 const steps = [
   {
@@ -229,7 +243,7 @@ export default function HomePage() {
                       height: '100%'
                     }}
                   >
-                    <span>{selectedCountry.flag}</span>
+                    <img src={getFlagUrl(selectedCountry.code)} alt={selectedCountry.name} style={{ width: '24px', height: '18px', objectFit: 'cover', borderRadius: '2px' }} />
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: '#6B7280' }}>
                       <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -271,7 +285,7 @@ export default function HomePage() {
                             fontSize: '0.875rem'
                           }}
                         >
-                          <span style={{ fontSize: '1.25rem' }}>{country.flag}</span>
+                          <img src={getFlagUrl(country.code)} alt={country.name} style={{ width: '24px', height: '18px', objectFit: 'cover', borderRadius: '2px' }} />
                           <span style={{ flex: 1, color: '#374151' }}>{country.name}</span>
                           <span style={{ color: '#6B7280' }}>{country.dial}</span>
                         </button>
