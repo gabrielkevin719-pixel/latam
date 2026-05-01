@@ -215,7 +215,15 @@ export default function HomePage() {
 
             <form onSubmit={handleSubmit}>
               {/* Phone Input */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                background: 'white',
+                border: '2px solid #e5e7eb',
+                borderRadius: '12px',
+                marginBottom: '1rem',
+                overflow: 'hidden'
+              }}>
                 {/* Country Selector */}
                 <div style={{ position: 'relative' }}>
                   <button
@@ -225,17 +233,16 @@ export default function HomePage() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
-                      padding: '0.875rem 0.75rem',
+                      padding: '1rem 0.75rem',
                       background: '#f8fafc',
-                      border: '2px solid #e5e7eb',
-                      borderRadius: '12px',
+                      border: 'none',
+                      borderRight: '1px solid #e5e7eb',
                       cursor: 'pointer',
-                      fontSize: '1.25rem',
                       height: '100%'
                     }}
                   >
-                    <img src={getFlagUrl(selectedCountry.code)} alt={selectedCountry.name} style={{ width: '24px', height: '18px', objectFit: 'cover', borderRadius: '2px' }} />
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: '#6B7280' }}>
+                    <img src={getFlagUrl(selectedCountry.code)} alt={selectedCountry.name} style={{ width: '28px', height: '20px', objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} />
+                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ color: '#6B7280' }}>
                       <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
@@ -251,8 +258,8 @@ export default function HomePage() {
                       borderRadius: '12px',
                       boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
                       zIndex: 50,
-                      minWidth: '200px',
-                      maxHeight: '250px',
+                      minWidth: '220px',
+                      maxHeight: '280px',
                       overflowY: 'auto'
                     }}>
                       {countries.map((country) => (
@@ -273,52 +280,49 @@ export default function HomePage() {
                             border: 'none',
                             cursor: 'pointer',
                             textAlign: 'left',
-                            fontSize: '0.875rem'
+                            fontSize: '0.875rem',
+                            transition: 'background 0.15s'
                           }}
+                          onMouseOver={(e) => e.currentTarget.style.background = selectedCountry.code === country.code ? '#f0fdf4' : '#f9fafb'}
+                          onMouseOut={(e) => e.currentTarget.style.background = selectedCountry.code === country.code ? '#f0fdf4' : 'transparent'}
                         >
-                          <img src={getFlagUrl(country.code)} alt={country.name} style={{ width: '24px', height: '18px', objectFit: 'cover', borderRadius: '2px' }} />
-                          <span style={{ flex: 1, color: '#374151' }}>{country.name}</span>
-                          <span style={{ color: '#6B7280' }}>{country.dial}</span>
+                          <img src={getFlagUrl(country.code)} alt={country.name} style={{ width: '28px', height: '20px', objectFit: 'cover', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }} />
+                          <span style={{ flex: 1, color: '#374151', fontWeight: '500' }}>{country.name}</span>
+                          <span style={{ color: '#9CA3AF', fontSize: '0.8rem' }}>{country.dial}</span>
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
 
+                {/* Dial Code */}
+                <span style={{ 
+                  padding: '0 0.5rem 0 0.75rem',
+                  color: '#374151',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {selectedCountry.dial}
+                </span>
+
                 {/* Phone Number Input */}
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                  <span style={{ 
-                    padding: '0.875rem 0 0.875rem 1rem',
-                    background: 'white',
-                    border: '2px solid #e5e7eb',
-                    borderRight: 'none',
-                    borderRadius: '12px 0 0 12px',
-                    color: '#6B7280',
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                  placeholder="Número de teléfono"
+                  style={{ 
+                    flex: 1,
+                    padding: '1rem 1rem 1rem 0',
                     fontSize: '1rem',
-                    fontWeight: '500'
-                  }}>
-                    {selectedCountry.dial}
-                  </span>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Número de teléfono"
-                    style={{ 
-                      flex: 1,
-                      padding: '0.875rem 1rem',
-                      fontSize: '1rem',
-                      fontWeight: '500',
-                      background: 'white',
-                      border: '2px solid #e5e7eb',
-                      borderLeft: 'none',
-                      borderRadius: '0 12px 12px 0',
-                      color: '#111827',
-                      outline: 'none',
-                      minWidth: 0
-                    }}
-                  />
-                </div>
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#111827',
+                    outline: 'none',
+                    minWidth: 0
+                  }}
+                />
               </div>
 
               <button
