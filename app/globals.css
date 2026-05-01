@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  
+  --primary: 142 70% 45%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 142 70% 45%;
+  
+  --radius: 0.75rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Phone Input Styles */
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: hsl(var(--secondary));
+  border: 1.5px solid hsl(var(--border));
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.PhoneInputCountryIcon {
+  width: 24px;
+  height: 18px;
+}
+
+.PhoneInputCountrySelectArrow {
+  margin-left: 0.5rem;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid hsl(var(--muted-foreground));
+}
+
+.PhoneInputInput {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  background: hsl(var(--card));
+  border: 1.5px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.PhoneInputInput:focus {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+}
+
+.PhoneInputInput::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 14px hsl(var(--primary) / 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 6px 24px hsl(var(--primary) / 0.5);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
