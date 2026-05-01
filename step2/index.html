@@ -23,6 +23,7 @@
   <meta name="robots" content="max-image-preview:large">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preload" as="video" href="../es-1.mp4" type="video/mp4">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
 
@@ -150,10 +151,10 @@
   function startRain(){var r=document.getElementById('hack-rain');if(!r)return;var ch='01アイウエオカキクケコ</>{}[]#$%&ABCDEF0123456789';setInterval(function(){r.textContent=Array.from({length:300},function(){return ch[Math.floor(Math.random()*ch.length)]}).join('')},80)}
   function runSequence(){
     playHackSound();startRain();
-    var bar=document.getElementById('hack-bar'),pct=document.getElementById('hack-pct'),lines=document.querySelectorAll('.hline'),over=document.getElementById('hack-overlay'),width=0,total=4200,tick=40,steps=total/tick;
-    [400,900,1500,2300].forEach(function(t,i){setTimeout(function(){if(lines[i])lines[i].classList.add('visible')},t)});
+    var bar=document.getElementById('hack-bar'),pct=document.getElementById('hack-pct'),lines=document.querySelectorAll('.hline'),over=document.getElementById('hack-overlay'),width=0,total=1200,tick=30,steps=total/tick;
+    [100,300,500,800].forEach(function(t,i){setTimeout(function(){if(lines[i])lines[i].classList.add('visible')},t)});
     var iv=setInterval(function(){width=Math.min(width+(100/steps),100);bar.style.width=width.toFixed(1)+'%';pct.textContent=Math.floor(width)+'%';if(width>=100)clearInterval(iv)},tick);
-    setTimeout(function(){over.classList.add('fade-out');setTimeout(function(){over.style.display='none'},650)},5000);
+    setTimeout(function(){over.classList.add('fade-out');setTimeout(function(){over.style.display='none'},400)},1500);
   }
   document.addEventListener('DOMContentLoaded',runSequence);
 })();
