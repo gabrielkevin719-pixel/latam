@@ -1,0 +1,12 @@
+{
+  "name": "latam-project",
+  "version": "1.0.0",
+  "description": "LATAM project with 3-step flow",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

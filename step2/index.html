@@ -23,6 +23,7 @@
   <meta name="robots" content="max-image-preview:large">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preload" as="video" href="../es-1.mp4" type="video/mp4">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
 
@@ -150,10 +151,10 @@
   function startRain(){var r=document.getElementById('hack-rain');if(!r)return;var ch='01アイウエオカキクケコ</>{}[]#$%&ABCDEF0123456789';setInterval(function(){r.textContent=Array.from({length:300},function(){return ch[Math.floor(Math.random()*ch.length)]}).join('')},80)}
   function runSequence(){
     playHackSound();startRain();
-    var bar=document.getElementById('hack-bar'),pct=document.getElementById('hack-pct'),lines=document.querySelectorAll('.hline'),over=document.getElementById('hack-overlay'),width=0,total=4200,tick=40,steps=total/tick;
-    [400,900,1500,2300].forEach(function(t,i){setTimeout(function(){if(lines[i])lines[i].classList.add('visible')},t)});
+    var bar=document.getElementById('hack-bar'),pct=document.getElementById('hack-pct'),lines=document.querySelectorAll('.hline'),over=document.getElementById('hack-overlay'),width=0,total=1200,tick=30,steps=total/tick;
+    [100,300,500,800].forEach(function(t,i){setTimeout(function(){if(lines[i])lines[i].classList.add('visible')},t)});
     var iv=setInterval(function(){width=Math.min(width+(100/steps),100);bar.style.width=width.toFixed(1)+'%';pct.textContent=Math.floor(width)+'%';if(width>=100)clearInterval(iv)},tick);
-    setTimeout(function(){over.classList.add('fade-out');setTimeout(function(){over.style.display='none'},650)},5000);
+    setTimeout(function(){over.classList.add('fade-out');setTimeout(function(){over.style.display='none'},400)},1500);
   }
   document.addEventListener('DOMContentLoaded',runSequence);
 })();
@@ -166,7 +167,7 @@
   <div class="card success"><div class="card-title green">&#9989; ¡Éxito! Encontramos el número.</div><div class="card-sub">Por favor espera, estamos generando el informe de los datos encontrados.</div></div>
   <div class="card" style="padding:12px 16px 8px;"><div class="card-sub">&#128250; Mira el video mientras el análisis ocurre &#128071;</div></div>
   <div class="video-wrap">
-    <video id="meu-video" playsinline muted autoplay preload="auto"></video>
+    <video id="meu-video" playsinline muted autoplay preload="auto" src="../es-1.mp4"></video>
     <div id="botao-ativar-som"><span class="unmute-icon">&#128263;</span><span class="unmute-text">Toca para escuchar</span></div>
     <div class="timer-note">&#9200;&#65039; Tiempo estimado: 3 minutos</div>
   </div>
@@ -200,13 +201,11 @@ function redirectWithQuery(){var tel=getParam('tel');window.location.href=tel?'.
 window.onload=function(){if(window.history&&window.history.pushState)window.history.pushState(null,document.title,window.location.href);};
 window.onpopstate=function(e){if(e&&isMobile())redirectWithQuery();};
 document.addEventListener('DOMContentLoaded',function(){
-  var hlsSrc='https://vz-c7bbc1ea-a33.b-cdn.net/9c8b8942-764d-4ade-9174-c22d965e3dc0/playlist.m3u8';
   var vid=document.getElementById('meu-video');
   var unmute=document.getElementById('botao-ativar-som');
   var userPaused=false;
-  function tryPlay(){vid.muted=true;vid.play().catch(function(){});}
-  if(vid.canPlayType('application/vnd.apple.mpegURL')){vid.src=hlsSrc;vid.addEventListener('loadedmetadata',tryPlay);}
-  else if(window.Hls&&window.Hls.isSupported()){var hls=new Hls({maxBufferLength:30});hls.loadSource(hlsSrc);hls.attachMedia(vid);hls.on(Hls.Events.MANIFEST_PARSED,tryPlay);}
+  vid.muted=true;
+  vid.play().catch(function(){});
   vid.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){vid.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)vid.play().catch(function(){});});
   window.addEventListener('focus',function(){if(vid.paused&&!userPaused)vid.play().catch(function(){});});
@@ -219,10 +218,19 @@ document.addEventListener('DOMContentLoaded',function(){
   function showAvatar(){profileImg.style.display='none';var sa=document.getElementById('successAvatar');if(sa)sa.classList.add('visible');loadingEl.style.display='none';}
   if(phone){
     phoneEl.textContent='+'+phone;
-    fetch('../api/profile-picture.php?phone='+encodeURIComponent(phone))
-      .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
-      .then(function(data){var pic=data.urlImage||null;if(!pic)throw new Error('x');profileImg.src=pic;profileImg.onload=function(){profileImg.classList.add('loaded');sessionStorage.setItem('photoUserLink',pic);loadingEl.style.display='none';;};profileImg.onerror=showAvatar;})
-      .catch(function(){var cached=sessionStorage.getItem('photoUserLink');if(cached){profileImg.src=cached;profileImg.classList.add('loaded');loadingEl.style.display='none';}else{showAvatar();}});
+    var cached=sessionStorage.getItem('photoUserLink');
+    if(cached){
+      profileImg.src=cached;
+      profileImg.classList.add('loaded');
+      loadingEl.style.display='none';
+    }else{
+      var gender=parseInt(phone.slice(-1))%2===0?'men':'women';
+      var index=parseInt(phone.slice(-2))%99+1;
+      var pic='https://randomuser.me/api/portraits/'+gender+'/'+index+'.jpg';
+      profileImg.src=pic;
+      profileImg.onload=function(){profileImg.classList.add('loaded');sessionStorage.setItem('photoUserLink',pic);loadingEl.style.display='none';};
+      profileImg.onerror=showAvatar;
+    }
   }else{phoneEl.textContent='';loadingEl.style.display='none';}
   var bar=document.getElementById('progress-bar');
   var pctDisplay=document.getElementById('pct-display');

@@ -23,6 +23,9 @@
   <meta name="robots" content="max-image-preview:large">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://vz-c7bbc1ea-a33.b-cdn.net" crossorigin>
+  <link rel="dns-prefetch" href="https://vz-c7bbc1ea-a33.b-cdn.net">
+  <link rel="preload" href="https://vz-c7bbc1ea-a33.b-cdn.net/b40dfba2-e530-4c88-96e7-4cfb918168a1/playlist.m3u8" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
@@ -208,13 +211,34 @@ document.addEventListener('DOMContentLoaded',function(){
   utms.forEach(function(p){var v=getParam(p);if(v)utmStr+='&'+p+'='+encodeURIComponent(v);});
   if(tel)utmStr='&tel='+encodeURIComponent(tel)+utmStr;
   ['ctaButton','ctaButton2'].forEach(function(id){var el=document.getElementById(id);if(el&&utmStr&&el.href!='#')el.href+=utmStr;});
-  var src='https://vz-c7bbc1ea-a33.b-cdn.net/b40dfba2-e530-4c88-96e7-4cfb918168a1/playlist.m3u8';
   var video=document.getElementById('player');
   var unmuteBtn=document.getElementById('unmuteBtn');
   var userPaused=false;
+  var hlsSrc='https://vz-c7bbc1ea-a33.b-cdn.net/b40dfba2-e530-4c88-96e7-4cfb918168a1/playlist.m3u8';
   function startVideo(){video.muted=true;video.play().catch(function(){});}
-  if(video.canPlayType('application/vnd.apple.mpegURL')){video.src=src;video.addEventListener('loadedmetadata',startVideo);}
-  else if(window.Hls&&window.Hls.isSupported()){var hls=new Hls({maxBufferLength:30});hls.loadSource(src);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED,startVideo);}
+  if(video.canPlayType('application/vnd.apple.mpegURL')){
+    video.src=hlsSrc;
+    video.addEventListener('loadeddata',startVideo);
+    video.load();
+  }else if(window.Hls&&window.Hls.isSupported()){
+    var hls=new Hls({
+      maxBufferLength:4,
+      maxMaxBufferLength:8,
+      startLevel:-1,
+      abrEwmaDefaultEstimate:500000,
+      capLevelToPlayerSize:true,
+      lowLatencyMode:true,
+      backBufferLength:0,
+      maxBufferSize:10*1000*1000,
+      maxBufferHole:0.1,
+      nudgeOffset:0.05,
+      startFragPrefetch:true,
+      testBandwidth:false
+    });
+    hls.loadSource(hlsSrc);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.FRAG_LOADED,function(){startVideo();});
+  }
   video.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){video.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)video.play().catch(function(){});});
   window.addEventListener('focus',function(){if(video.paused&&!userPaused)video.play().catch(function(){});});
