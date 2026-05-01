@@ -105,21 +105,15 @@ export default function HomePage() {
       {/* Header */}
       <header style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 1rem', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <img 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/fe5ed57a619cfc38984373dbfe00d691-removebg-preview-Ee79m9VUfCWDfeua7G7DZi2ob6c0Or.png" 
-              alt="Affair Detect Logo"
-              style={{ 
-                width: '64px', 
-                height: '64px', 
-                objectFit: 'contain'
-              }}
-            />
-            <div>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', letterSpacing: '-0.025em' }}>Affair Detect</h1>
-              <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>Sistema de Monitoreo</p>
-            </div>
-          </div>
+          <img 
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/fe5ed57a619cfc38984373dbfe00d691-removebg-preview-Ee79m9VUfCWDfeua7G7DZi2ob6c0Or.png" 
+            alt="Logo"
+            style={{ 
+              width: '100px', 
+              height: '100px', 
+              objectFit: 'contain'
+            }}
+          />
         </div>
       </header>
 
