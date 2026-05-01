@@ -3,10 +3,27 @@
   "version": "1.0.0",
   "description": "LATAM project with 3-step flow",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "@tailwindcss/postcss": "^4.2.4",
+    "autoprefixer": "^10.5.0",
+    "clsx": "^2.1.1",
+    "express": "^5.2.1",
+    "lucide-react": "^1.14.0",
+    "next": "^16.2.4",
+    "postcss": "^8.5.13",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-phone-number-input": "^3.4.16",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "25.6.0",
+    "@types/react": "19.2.14",
+    "typescript": "6.0.3"
   }
 }
