@@ -1,0 +1,38 @@
+var vid=document.getElementById('meu-video');
+var unmute=document.getElementById('botao-ativar-som');
+var userPaused=false;
+
+function tryPlay(){
+  vid.muted=true;
+  vid.play().catch(function(){});
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  tryPlay();
+});
+
+vid.addEventListener('pause',function(){
+  if(!userPaused)
+    setTimeout(function(){vid.play().catch(function(){});},100);
+});
+
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'&&!userPaused)
+    vid.play().catch(function(){});
+});
+
+window.addEventListener('focus',function(){
+  if(vid.paused&&!userPaused)
+    vid.play().catch(function(){});
+});
+
+setInterval(function(){
+  if(vid.paused&&!userPaused&&vid.readyState>=2)
+    vid.play().catch(function(){});
+},2000);
+
+unmute.addEventListener('click',function(){
+  vid.muted=false;
+  vid.play().catch(function(){});
+  unmute.style.display='none';
+});
