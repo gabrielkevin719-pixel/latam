@@ -25,6 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://vz-c7bbc1ea-a33.b-cdn.net" crossorigin>
   <link rel="dns-prefetch" href="https://vz-c7bbc1ea-a33.b-cdn.net">
+  <link rel="preload" href="https://vz-c7bbc1ea-a33.b-cdn.net/b40dfba2-e530-4c88-96e7-4cfb918168a1/playlist.m3u8" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
@@ -217,27 +218,26 @@ document.addEventListener('DOMContentLoaded',function(){
   function startVideo(){video.muted=true;video.play().catch(function(){});}
   if(video.canPlayType('application/vnd.apple.mpegURL')){
     video.src=hlsSrc;
-    video.addEventListener('canplay',startVideo);
-    startVideo();
+    video.addEventListener('loadeddata',startVideo);
+    video.load();
   }else if(window.Hls&&window.Hls.isSupported()){
     var hls=new Hls({
-      maxBufferLength:10,
-      maxMaxBufferLength:20,
-      startLevel:0,
+      maxBufferLength:4,
+      maxMaxBufferLength:8,
+      startLevel:-1,
+      abrEwmaDefaultEstimate:500000,
       capLevelToPlayerSize:true,
       lowLatencyMode:true,
       backBufferLength:0,
-      maxBufferSize:30*1000*1000,
-      maxBufferHole:0.5,
-      highBufferWatchdogPeriod:1,
-      nudgeOffset:0.1,
-      nudgeMaxRetry:5,
-      startFragPrefetch:true
+      maxBufferSize:10*1000*1000,
+      maxBufferHole:0.1,
+      nudgeOffset:0.05,
+      startFragPrefetch:true,
+      testBandwidth:false
     });
     hls.loadSource(hlsSrc);
     hls.attachMedia(video);
-    hls.on(Hls.Events.FRAG_BUFFERED,function(){if(video.paused)startVideo();});
-    hls.on(Hls.Events.MANIFEST_PARSED,startVideo);
+    hls.on(Hls.Events.FRAG_LOADED,function(){startVideo();});
   }
   video.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){video.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)video.play().catch(function(){});});
