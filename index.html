@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
+  <script>
+    window.pixelId = "69f28d0b57840db1e35980c3";
+    var a = document.createElement("script");
+    a.setAttribute("async", "");
+    a.setAttribute("defer", "");
+    a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(a);
+  </script>
+  <meta charset="UTF-8">
+  <title>WhatSpy - Monitoreo Discreto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --acid: #00ff88;
+      --acid2: #00e5ff;
+      --red: #ff2d55;
+      --yellow: #ffd60a;
+      --bg: #020408;
+      --surface: rgba(0,255,136,0.04);
+      --border: rgba(0,255,136,0.15);
+      --red-surface: rgba(255,45,85,0.06);
+      --red-border: rgba(255,45,85,0.25);
+      --text: #e8f4f0;
+      --muted: #4a6a5a;
+      --radius: 12px;
+    }
+    
+    html { font-size: 16px; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 60px;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb1 { width: 300px; height: 300px; background: rgba(0,255,136,0.06); top: -80px; right: -60px; }
+    .orb2 { width: 200px; height: 200px; background: rgba(0,229,255,0.04); bottom: 200px; left: -60px; animation-delay: -4s; }
+    
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+    @keyframes ctaGlow { 0%,100% { box-shadow: 0 4px 20px rgba(0,255,136,0.4); } 50% { box-shadow: 0 4px 50px rgba(0,255,136,0.7); } }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    
+    .page {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 30px 20px 20px;
+    }
+    .logo {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 20px rgba(0,255,136,0.3));
+    }
+    .headline {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .headline span { color: var(--acid); }
+    .subheadline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin: 0 16px;
+    }
+    
+    /* Phone Input Section */
+    .phone-section {
+      background: linear-gradient(145deg, rgba(0,255,136,0.08), rgba(0,229,255,0.04));
+      border: 1px solid rgba(0,255,136,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--acid), var(--acid2), var(--acid));
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--acid);
+      text-align: center;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+    
+    .phone-input-wrap {
+      margin-bottom: 16px;
+    }
+    
+    .iti { width: 100%; }
+    .iti__flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags.png"); }
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .iti__flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/img/flags@2x.png"); }
+    }
+    
+    #phone {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1.5px solid rgba(0,255,136,0.3);
+      border-radius: 10px;
+      padding: 16px 16px 16px 90px;
+      color: var(--text);
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #phone:focus {
+      border-color: var(--acid);
+      box-shadow: 0 0 0 3px rgba(0,255,136,0.15);
+    }
+    #phone::placeholder { color: var(--muted); }
+    
+    .iti__selected-flag {
+      background: rgba(0,255,136,0.1);
+      border-radius: 8px 0 0 8px;
+    }
+    .iti__arrow { border-top-color: var(--acid); }
+    .iti__selected-dial-code { color: var(--acid); }
+    .iti__country-list {
+      background: #0a0f0a;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .iti__country.iti__highlight,
+    .iti__country:hover {
+      background: rgba(0,255,136,0.1);
+    }
+    
+    .phone-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    /* Features List */
+    .features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+    .features li .check {
+      color: var(--acid);
+      font-size: 1rem;
+      text-shadow: 0 0 8px rgba(0,255,136,0.5);
+    }
+    
+    /* Pricing */
+    .pricing {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0;
+      padding: 16px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
+    .price-old {
+      font-size: 1rem;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+    .price-new {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--acid);
+      text-shadow: 0 0 20px rgba(0,255,136,0.4);
+    }
+    .price-badge {
+      background: rgba(255,214,10,0.15);
+      border: 1px solid rgba(255,214,10,0.3);
+      color: var(--yellow);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    
+    /* CTA Button */
+    .btn-cta {
+      display: block;
+      width: 100%;
+      padding: 20px 16px;
+      background: linear-gradient(135deg, #00c853, #00e5ff);
+      border: none;
+      border-radius: 14px;
+      color: #000;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      animation: ctaGlow 1.8s ease-in-out infinite;
+      transition: transform 0.15s;
+      position: relative;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    .btn-cta:hover { transform: translateY(-3px); }
+    .btn-cta:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      animation: none;
+    }
+    .btn-cta .btn-sub {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      opacity: 0.8;
+      margin-top: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Guarantee */
+    .guarantee {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,255,136,0.1);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 16px;
+    }
+    .guarantee img {
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .guarantee-text {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .guarantee-text strong {
+      color: var(--text);
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    
+    /* Urgency */
+    .urgency {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+    .urgency span { color: var(--red); font-weight: 700; }
+    
+    /* Testimonials */
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 0 16px;
+    }
+    .testimonial {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .testimonial-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .testimonial-stars {
+      font-size: 0.75rem;
+      color: var(--yellow);
+      text-shadow: 0 0 6px rgba(255,214,10,0.4);
+    }
+    .testimonial-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    
+    /* Section Label */
+    .section-label {
+      margin: 8px 16px 0;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    /* Error Message */
+    .error-msg {
+      color: var(--red);
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 8px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <img src="step1/images/fe5ed57a619cfc38984373dbfe00d691-removebg-preview.png" alt="WhatSpy" class="logo">
+      <h1 class="headline">Descubre la verdad <span>en segundos</span></h1>
+      <p class="subheadline">Monitorea cualquier dispositivo de forma 100% discreta e indetectable</p>
+    </div>
+    
+    <!-- Main Card -->
+    <div class="card phone-section">
+      <div class="section-title">INGRESA EL NUMERO A MONITOREAR</div>
+      
+      <form id="phoneForm">
+        <div class="phone-input-wrap">
+          <input type="tel" id="phone" placeholder="Numero de telefono">
+        </div>
+        <p class="phone-hint">Ingresa el numero con codigo de area</p>
+        <div class="error-msg" id="errorMsg">Por favor ingresa un numero valido</div>
+        
+        <ul class="features">
+          <li><span class="check">&#9989;</span>Acceso completo a WhatsApp y redes sociales</li>
+          <li><span class="check">&#9989;</span>Fotos, videos y mensajes eliminados</li>
+          <li><span class="check">&#9989;</span>Rastreo GPS en tiempo real</li>
+          <li><span class="check">&#9989;</span>100% invisible e indetectable</li>
+        </ul>
+        
+        <div class="pricing">
+          <span class="price-old">$97</span>
+          <span class="price-new">$27</span>
+          <span class="price-badge">-72% HOY</span>
+        </div>
+        
+        <button type="submit" class="btn-cta" id="submitBtn">
+          ACCEDER AHORA
+          <span class="btn-sub">Pago unico - Acceso inmediato</span>
+        </button>
+        
+        <div class="guarantee">
+          <img src="https://digitalsecretss.online/wp-content/uploads/2025/05/30-DIAS-ESP.png" alt="Garantia 30 dias">
+          <div class="guarantee-text">
+            <strong>Garantia Total de 30 Dias</strong>
+            Si no estas satisfecho, te devolvemos el dinero sin preguntas.
+          </div>
+        </div>
+        
+        <div class="urgency">
+          &#128274; Pago seguro &bull; <span>&#9203; Oferta por tiempo limitado</span> &bull; Soporte 24/7
+        </div>
+      </form>
+    </div>
+    
+    <!-- Testimonials -->
+    <div class="section-label">&#128172; Lo que dicen nuestros usuarios</div>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="testimonial-header">
+          <div class="avatar">&#128105;</div>
+          <div>
+            <div class="testimonial-name">Maria G.</div>
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+        <div class="testimonial-text">"En 3 minutos ya tenia acceso a todo. Funciona exactamente como prometen."</div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-header">
+          <div class="avatar">&#128104;</div>
+          <div>
+            <div class="testimonial-name">Carlos M.</div>
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+        <div class="testimonial-text">"Discreto, rapido y muy facil de usar. Encontre todo lo que necesitaba saber."</div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize phone input
+      var phoneInput = document.getElementById('phone');
+      var iti = window.intlTelInput(phoneInput, {
+        initialCountry: 'mx',
+        preferredCountries: ['mx', 'ar', 'co', 'es', 'pe', 'cl', 've', 'ec'],
+        separateDialCode: true,
+        utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js'
+      });
+      
+      // Form submission
+      var form = document.getElementById('phoneForm');
+      var errorMsg = document.getElementById('errorMsg');
+      var submitBtn = document.getElementById('submitBtn');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var phoneNumber = phoneInput.value.trim();
+        
+        if (!phoneNumber || phoneNumber.length < 6) {
+          errorMsg.classList.add('visible');
+          return;
+        }
+        
+        errorMsg.classList.remove('visible');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'PROCESANDO...<span class="btn-sub">Por favor espera</span>';
+        
+        // Get full number with country code
+        var fullNumber = iti.getNumber();
+        var cleanNumber = fullNumber.replace(/\D/g, '');
+        
+        // Build checkout URL with UTM parameters
+        var checkoutUrl = 'https://pay.mycheckoutt.com/019d73dc-69c9-706c-bf5b-e2c8a6dfe8ee?ref=';
+        var utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        checkoutUrl += '&tel=' + encodeURIComponent(cleanNumber);
+        
+        utmParams.forEach(function(param) {
+          var value = urlParams.get(param);
+          if (value) {
+            checkoutUrl += '&' + param + '=' + encodeURIComponent(value);
+          }
+        });
+        
+        // Send tracking
+        fetch('https://primary-production-aac6.up.railway.app/webhook/pablo-monitor?step=direct&tel=' + cleanNumber, { method: 'GET' }).catch(function(){});
+        
+        // Redirect to checkout
+        setTimeout(function() {
+          window.location.href = checkoutUrl;
+        }, 800);
+      });
+      
+      // Clear error on input
+      phoneInput.addEventListener('input', function() {
+        errorMsg.classList.remove('visible');
+      });
+    });
+  </script>
+</body>
+</html>
