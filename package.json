@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "LATAM project with 3-step flow",
   "scripts": {
-    "dev": "vercel dev --listen 3000",
-    "start": "vercel dev --listen 3000"
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
