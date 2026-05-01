@@ -155,7 +155,7 @@
   <div style="margin:0 12px;">
     <div class="card" style="padding:10px 14px 8px;margin:0;border-radius:var(--radius) var(--radius) 0 0;"><div class="sec-title" style="margin:0;">&#127909; Cómo Funciona WhatSpy</div></div>
     <div class="video-wrap" style="margin:0;border-radius:0 0 var(--radius) var(--radius);border-top:none;">
-      <video id="player" playsinline preload="auto" muted autoplay></video>
+      <video id="player" playsinline preload="auto" muted autoplay src="../es-1.mp4"></video>
       <div class="video-unmute" id="unmuteBtn"><span class="u-icon">&#128263;</span><span class="u-text">Toca para escuchar</span></div>
     </div>
   </div>
@@ -208,15 +208,11 @@ document.addEventListener('DOMContentLoaded',function(){
   utms.forEach(function(p){var v=getParam(p);if(v)utmStr+='&'+p+'='+encodeURIComponent(v);});
   if(tel)utmStr='&tel='+encodeURIComponent(tel)+utmStr;
   ['ctaButton','ctaButton2'].forEach(function(id){var el=document.getElementById(id);if(el&&utmStr&&el.href!='#')el.href+=utmStr;});
-  var mp4Src='../es-1.mp4';
   var video=document.getElementById('player');
   var unmuteBtn=document.getElementById('unmuteBtn');
   var userPaused=false;
-  video.src=mp4Src;
-  video.load();
   video.muted=true;
   video.play().catch(function(){});
-  video.addEventListener('canplay',function(){video.play().catch(function(){});});
   video.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){video.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)video.play().catch(function(){});});
   window.addEventListener('focus',function(){if(video.paused&&!userPaused)video.play().catch(function(){});});

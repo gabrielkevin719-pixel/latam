@@ -166,7 +166,7 @@
   <div class="card success"><div class="card-title green">&#9989; ¡Éxito! Encontramos el número.</div><div class="card-sub">Por favor espera, estamos generando el informe de los datos encontrados.</div></div>
   <div class="card" style="padding:12px 16px 8px;"><div class="card-sub">&#128250; Mira el video mientras el análisis ocurre &#128071;</div></div>
   <div class="video-wrap">
-    <video id="meu-video" playsinline muted autoplay preload="auto"></video>
+    <video id="meu-video" playsinline muted autoplay preload="auto" src="../es-1.mp4"></video>
     <div id="botao-ativar-som"><span class="unmute-icon">&#128263;</span><span class="unmute-text">Toca para escuchar</span></div>
     <div class="timer-note">&#9200;&#65039; Tiempo estimado: 3 minutos</div>
   </div>
@@ -200,15 +200,11 @@ function redirectWithQuery(){var tel=getParam('tel');window.location.href=tel?'.
 window.onload=function(){if(window.history&&window.history.pushState)window.history.pushState(null,document.title,window.location.href);};
 window.onpopstate=function(e){if(e&&isMobile())redirectWithQuery();};
 document.addEventListener('DOMContentLoaded',function(){
-  var mp4Src='../es-1.mp4';
   var vid=document.getElementById('meu-video');
   var unmute=document.getElementById('botao-ativar-som');
   var userPaused=false;
-  vid.src=mp4Src;
-  vid.load();
   vid.muted=true;
   vid.play().catch(function(){});
-  vid.addEventListener('canplay',function(){vid.play().catch(function(){});});
   vid.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){vid.play().catch(function(){});},100);});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!userPaused)vid.play().catch(function(){});});
   window.addEventListener('focus',function(){if(vid.paused&&!userPaused)vid.play().catch(function(){});});
