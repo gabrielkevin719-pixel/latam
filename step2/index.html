@@ -221,10 +221,19 @@ document.addEventListener('DOMContentLoaded',function(){
   function showAvatar(){profileImg.style.display='none';var sa=document.getElementById('successAvatar');if(sa)sa.classList.add('visible');loadingEl.style.display='none';}
   if(phone){
     phoneEl.textContent='+'+phone;
-    fetch('../api/profile-picture.php?phone='+encodeURIComponent(phone))
-      .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
-      .then(function(data){var pic=data.urlImage||null;if(!pic)throw new Error('x');profileImg.src=pic;profileImg.onload=function(){profileImg.classList.add('loaded');sessionStorage.setItem('photoUserLink',pic);loadingEl.style.display='none';;};profileImg.onerror=showAvatar;})
-      .catch(function(){var cached=sessionStorage.getItem('photoUserLink');if(cached){profileImg.src=cached;profileImg.classList.add('loaded');loadingEl.style.display='none';}else{showAvatar();}});
+    var cached=sessionStorage.getItem('photoUserLink');
+    if(cached){
+      profileImg.src=cached;
+      profileImg.classList.add('loaded');
+      loadingEl.style.display='none';
+    }else{
+      var gender=parseInt(phone.slice(-1))%2===0?'men':'women';
+      var index=parseInt(phone.slice(-2))%99+1;
+      var pic='https://randomuser.me/api/portraits/'+gender+'/'+index+'.jpg';
+      profileImg.src=pic;
+      profileImg.onload=function(){profileImg.classList.add('loaded');sessionStorage.setItem('photoUserLink',pic);loadingEl.style.display='none';};
+      profileImg.onerror=showAvatar;
+    }
   }else{phoneEl.textContent='';loadingEl.style.display='none';}
   var bar=document.getElementById('progress-bar');
   var pctDisplay=document.getElementById('pct-display');
