@@ -23,7 +23,8 @@
   <meta name="robots" content="max-image-preview:large">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  
+  <link rel="preconnect" href="https://vz-c7bbc1ea-a33.b-cdn.net" crossorigin>
+  <link rel="dns-prefetch" href="https://vz-c7bbc1ea-a33.b-cdn.net">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
@@ -216,11 +217,26 @@ document.addEventListener('DOMContentLoaded',function(){
   function startVideo(){video.muted=true;video.play().catch(function(){});}
   if(video.canPlayType('application/vnd.apple.mpegURL')){
     video.src=hlsSrc;
-    video.addEventListener('loadedmetadata',startVideo);
+    video.addEventListener('canplay',startVideo);
+    startVideo();
   }else if(window.Hls&&window.Hls.isSupported()){
-    var hls=new Hls({maxBufferLength:30,startLevel:0,capLevelToPlayerSize:true});
+    var hls=new Hls({
+      maxBufferLength:10,
+      maxMaxBufferLength:20,
+      startLevel:0,
+      capLevelToPlayerSize:true,
+      lowLatencyMode:true,
+      backBufferLength:0,
+      maxBufferSize:30*1000*1000,
+      maxBufferHole:0.5,
+      highBufferWatchdogPeriod:1,
+      nudgeOffset:0.1,
+      nudgeMaxRetry:5,
+      startFragPrefetch:true
+    });
     hls.loadSource(hlsSrc);
     hls.attachMedia(video);
+    hls.on(Hls.Events.FRAG_BUFFERED,function(){if(video.paused)startVideo();});
     hls.on(Hls.Events.MANIFEST_PARSED,startVideo);
   }
   video.addEventListener('pause',function(){if(!userPaused)setTimeout(function(){video.play().catch(function(){});},100);});
